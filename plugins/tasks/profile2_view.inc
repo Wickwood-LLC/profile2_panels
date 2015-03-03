@@ -69,6 +69,15 @@ function profile2_panels_profile2_view_menu_alter(&$items, $task) {
  * which is profile2_page_view().
  */
 function profile2_panels_profile2_view_page($profile2) {
+  // Save empty profile's. Not clean, but we need a ID later.
+  if (isset($profile2->is_new) && empty($profile2->pid)) {
+    $profile2->save();
+    if (empty($profile2->pid)) {
+      drupal_set_message("Could not load profile2", 'error');
+      return "";
+    }
+  }
+
   // Prep the profile2 to be displayed so all of the regular hooks are triggered.
   // Also save the output for later, in case it is needed.
   module_load_include('inc', 'profile2_page');
