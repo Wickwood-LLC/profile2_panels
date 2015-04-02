@@ -16,13 +16,16 @@ function profile2_panels_profile2_edit_page_manager_tasks() {
     'admin title' => t('Profile2 add/edit template'),
     'admin description' => t('When enabled, this overrides the default Drupal behavior for adding or edit profile2s at <em>%profile-type/%profile2_by_uid/edit</em> and <em>profile2/add/%profile2_type</em>. If you add variants, you may use selection criteria such as profile2 type or language or user access to provide different edit forms for profile2s. If no variant is selected, the default Drupal profile2 edit will be used.'),
     'admin path' => '%profile-type/%profile2_by_uid/edit',
+
     // Menu hooks so that we can alter the %profile-type/%profile2_by_uid menu entry to point to us.
     'hook menu alter' => 'profile2_panels_profile2_edit_menu_alter',
+
     // This is task uses 'context' handlers and must implement these to give the
     // handler data it needs.
     'handler type' => 'context',
     'get arguments' => 'profile2_panels_profile2_edit_get_arguments',
     'get context placeholders' => 'profile2_panels_profile2_edit_get_contexts',
+
     // Allow this to be enabled or disabled:
     'disabled' => variable_get('profile2_panels_profile2_edit_disabled', TRUE),
     'enable callback' => 'profile2_panels_profile2_edit_enable',
@@ -109,6 +112,9 @@ function profile2_panels_profile2_edit($entity_type, $profile2) {
  * create dummy arguments that contain the needed data.
  */
 function profile2_panels_profile2_edit_get_arguments($task, $subtask_id) {
+
+  dpm(func_get_args());
+
   return array(
     array(
       'keyword' => 'profile2',
@@ -124,6 +130,7 @@ function profile2_panels_profile2_edit_get_arguments($task, $subtask_id) {
  * Callback to get context placeholders provided by this handler.
  */
 function profile2_panels_profile2_edit_get_contexts($task, $subtask_id) {
+
   return ctools_context_get_placeholders_from_argument(profile2_panels_profile2_edit_get_arguments($task, $subtask_id));
 }
 

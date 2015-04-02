@@ -11,7 +11,7 @@
  * by the system that includes this file.
  */
 $plugin = array(
-  'title' => t("Profile2 edit form: profile2 PID"),
+  'title' => t("Profile2 edit form"),
   // keyword to use for %substitution
   'keyword' => 'profile2',
   'description' => t('Creates a profile2 edit form context from a profile2 PID argument.'),
