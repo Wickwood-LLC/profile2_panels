@@ -16,16 +16,13 @@ function profile2_panels_profile2_edit_page_manager_tasks() {
     'admin title' => t('Profile2 add/edit template'),
     'admin description' => t('When enabled, this overrides the default Drupal behavior for adding or edit profile2s at <em>%profile-type/%profile2_by_uid/edit</em> and <em>profile2/add/%profile2_type</em>. If you add variants, you may use selection criteria such as profile2 type or language or user access to provide different edit forms for profile2s. If no variant is selected, the default Drupal profile2 edit will be used.'),
     'admin path' => '%profile-type/%profile2_by_uid/edit',
-
     // Menu hooks so that we can alter the %profile-type/%profile2_by_uid menu entry to point to us.
     'hook menu alter' => 'profile2_panels_profile2_edit_menu_alter',
-
     // This is task uses 'context' handlers and must implement these to give the
     // handler data it needs.
     'handler type' => 'context',
     'get arguments' => 'profile2_panels_profile2_edit_get_arguments',
     'get context placeholders' => 'profile2_panels_profile2_edit_get_contexts',
-
     // Allow this to be enabled or disabled:
     'disabled' => variable_get('profile2_panels_profile2_edit_disabled', TRUE),
     'enable callback' => 'profile2_panels_profile2_edit_enable',
@@ -68,38 +65,22 @@ function profile2_panels_profile2_edit_menu_alter(&$items, $task) {
  */
 function profile2_panels_profile2_edit($entity_type, $profile2) {
 
-  // Save empty profile's. Not clean, but we need a ID later.
-  if (isset($profile2->is_new) && empty($profile2->pid)) {
-    $profile2->save();
-    if (empty($profile2->pid)) {
-      drupal_set_message("Could not load profile2", 'error');
-      return "";
-    }
-  }
-
-  // Prep the profile2 to be displayed so all of the regular hooks are triggered.
-  // Also save the output for later, in case it is needed.
-  module_load_include('inc', 'profile2_page', 'profile2_page');
-  $default_output = entity_ui_get_form('profile2', $profile2);
-
   // Load my task plugin
   $task = page_manager_get_task('profile2_edit');
 
-  // Load the profile2 into a context.
+  // Load the node into a context.
   ctools_include('context');
   ctools_include('context-task-handler');
-
-  // Load all contexts.
   $contexts = ctools_context_handler_get_task_contexts($task, '', array($profile2));
 
   $arg = array(isset($profile2->pid) ? $profile2->pid : $profile2->type);
   $output = ctools_context_handler_render($task, '', $contexts, $arg);
-
-
   if ($output === FALSE) {
-    // If we get here, this profile2 bundle is not handled by page_manager.
-    // a.k.a. fall-through.
-    return $default_output;
+    // Fall back!
+    // We've already built the form with the context, so we can't build it again, or
+    // form_clean_id will mess up our ids. But we don't really need to, either:
+    $context = reset($contexts);
+    $output = $context->form;
   }
 
   return $output;
@@ -113,14 +94,12 @@ function profile2_panels_profile2_edit($entity_type, $profile2) {
  */
 function profile2_panels_profile2_edit_get_arguments($task, $subtask_id) {
 
-  dpm(func_get_args());
-
   return array(
     array(
       'keyword' => 'profile2',
       'identifier' => t('Profile2 being edited'),
       'id' => 1,
-      'name' => 'entity_id:profile2',
+      'name' => 'profile2_edit',
       'settings' => array(),
     ),
   );
