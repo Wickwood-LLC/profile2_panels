@@ -64,7 +64,7 @@ function profile2_panels_profile2_edit($entity_type, $profile2) {
   // Load my task plugin
   $task = page_manager_get_task('profile2_edit');
 
-  // Load the node into a context.
+  // Load the profile2 into a context.
   ctools_include('context');
   ctools_include('context-task-handler');
   $contexts = ctools_context_handler_get_task_contexts($task, '', array($profile2));
