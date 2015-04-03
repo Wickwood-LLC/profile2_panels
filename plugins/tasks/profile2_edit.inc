@@ -1,8 +1,4 @@
 <?php
-// Load profile2_page.inc every time to allow AJAXified Profile2 edit forms.
-// @todo: move this module_load_include inside a function that is only called
-// @todo: when the form is reloaded with AJAX.
-module_load_include('inc', 'profile2_page', 'profile2_page');
 
 /**
  * Specialized implementation of hook_page_manager_task_tasks(). See api-task.html for
