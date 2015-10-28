@@ -18,6 +18,8 @@ $plugin = array(
   'context' => 'profile2_panels_context_create_profile2_edit_form',
   'edit form' => 'profile2_panels_context_profile2_edit_form_settings_form',
   'defaults' => array('pid' => ''),
+  'keyword' => 'profile2_edit',
+  'context name' => 'profile2_edit_form',
   'convert list' => 'profile2_panels_context_profile2_edit_convert_list',
   'convert' => 'profile2_panels_context_profile2_edit_convert',
   'placeholder form' => array(
@@ -35,8 +37,11 @@ function profile2_panels_context_create_profile2_edit_form($empty, $profile2 = N
   // We want to create the taxonomy add form, so we need to add the form contexts too.
   $context = new ctools_context(array(
     'form',
+    'profile2_edit',
+    'profile2_form',
     'profile2_edit_form',
-    'entity:profile2',
+    'profile2',
+    'entity:profile2'
   ));
   $context->keyword = 'profile2_edit';
   $context->plugin = 'profile2_edit_form';
@@ -75,6 +80,13 @@ function profile2_panels_context_create_profile2_edit_form($empty, $profile2 = N
 
   // We render the form with entityapi.
   $form = entity_ui_get_form('profile2', $profile2, 'edit', $form_state);
+  // Profile2 type specific fields will be under 'profile_' . $profile2->type within form.
+  // @see profile2_attach_form()
+  // So, ctools_entity_form_field_content_type_render() will not get the form
+  // fields directly from form array.
+  // Move those field directly under form array.
+  $form = array_merge($form, $form['profile_' . $profile2->type]);
+  unset($form['profile_' . $profile2->type]);
 
 
   // Form with correct $formstate is there, now add it to the context.
