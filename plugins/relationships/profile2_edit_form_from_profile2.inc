@@ -26,7 +26,7 @@ function profile2_panels_edit_form_from_profile2_context($context, $conf) {
     // If the profile is new, we load one. Creation and saving of the
     // new profile2 is handled in the context.
     // If data is empty, it means the profile is loaded by a relation.
-    if (empty($context->data)) {
+    if (empty($context->data) && !empty($context->placeholder['conf']['type'])) {
       $uid = $context->placeholder['conf']['id'];
       $profile_type = $context->placeholder['conf']['type'];
       $enriched_context = ctools_context_create('profile2_edit_form', profile2_by_uid_load($uid, $profile_type));
