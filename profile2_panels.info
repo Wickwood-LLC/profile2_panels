@@ -1,6 +1,7 @@
 name = Profile2 Panels
 description = Adds CTools Page Manager (Panels) support for Profile2.
 core = "7.x"
+version = 1.4
 dependencies[] = profile2_page
 dependencies[] = page_manager
 package = Profile2
