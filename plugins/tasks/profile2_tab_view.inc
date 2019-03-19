@@ -51,11 +51,12 @@ function profile2_panels_profile2_tab_view_menu_alter(&$items, $task) {
     if (!empty($type->data['use_tab'])) {
       $path = profile2_page_get_base_path($type);
 
-      $callback = $items['user/%user/view/' . $type_name]['page callback'];
-      if ($callback == 'profile2_page_view_for_user' || variable_get('page_manager_override_anyway', FALSE)) {
-        $items['user/%user/view/' . $type_name]['page callback'] = 'profile2_panels_profile2_tab_view_page';
-        $items['user/%user/view/' . $type_name]['file path'] = $task['path'];
-        $items['user/%user/view/' . $type_name]['file'] = $task['file'];
+      $callback = $items['user/%profile2_by_uid/view/' . $type_name]['page callback'];
+      if ($callback == 'profile2_page_view' || variable_get('page_manager_override_anyway', FALSE)) {
+        $items['user/%profile2_by_uid/view/' . $type_name]['page callback'] = 'profile2_panels_profile2_tab_view_page';
+        $items['user/%profile2_by_uid/view/' . $type_name]['page arguments'] = array(3, 1);
+        $items['user/%profile2_by_uid/view/' . $type_name]['file path'] = $task['path'];
+        $items['user/%profile2_by_uid/view/' . $type_name]['file'] = $task['file'];
       }
     }
   }
